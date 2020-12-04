@@ -51,11 +51,11 @@ from pprint import pprint
 def arg_parser():
     parser = ArgumentParser()
     parser.add_argument("--global-flag", help="the global flag")
-    subparsers = parser.add_subparsers(description="Available Commands", help="Commands", dest="command")
+    subparsers = parser.add_subparsers(description="Available Commands", metavar="[command]", dest="command", required=True)
     parser_get = subparsers.add_parser("get", help="the get command")
 
     parser_get_subparsers = parser_get.add_subparsers(
-        title="Available Commands", metavar="[command]", dest="get_subcommands", required=True)
+        title="Available Commands", metavar="[command]", dest="get_subcmd", required=True)
 
     parser_get_subcmd = parser_get_subparsers.add_parser(
         "document", description="Download & print a document to standard output", help="Download a document")
