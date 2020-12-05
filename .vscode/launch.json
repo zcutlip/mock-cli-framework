@@ -6,12 +6,11 @@
     "configurations": [
 
         {
-            "name": "Python: Module",
+            "name": "op get item with vault",
             "type": "python",
             "request": "launch",
             "module": "mock_op.mock_op",
-            "args": ["get", "item", "fooitem", "--fields", "username,password"]
-
+            "args": ["get", "item", "Example Login 2", "--vault", "Test Data"]
         }
     ]
 }
