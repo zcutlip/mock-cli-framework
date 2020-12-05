@@ -55,7 +55,7 @@ def arg_parser():
     parser_get = subparsers.add_parser("get", help="the get command")
 
     parser_get_subparsers = parser_get.add_subparsers(
-        title="Available Commands", metavar="[command]", dest="get_subcmd", required=True)
+        title="Available Commands", metavar="[command]", dest="subcommand", required=True)
 
     parser_get_subcmd = parser_get_subparsers.add_parser(
         "document", description="Download & print a document to standard output", help="Download a document")
@@ -67,6 +67,7 @@ def arg_parser():
     parser_get_subcmd.add_argument(
         "item", metavar="<item>", help="The item to get")
     parser_get_subcmd.add_argument("--fields", help="comma-separated list of fields to get about the item")
+    parser_get_subcmd.add_argument("--vault", help="The vault to look up and item from")
 
     return parser
 
