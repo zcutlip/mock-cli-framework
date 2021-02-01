@@ -1,6 +1,9 @@
-__title__ = "Mock OP-CLI"
+__title__ = "Mock CLI Tool Framework"
 __version__ = "0.1.0.dev0"
-__summary__ = "A mock 'op' client to simulate the 1Password CLI tool"
+__summary__ = """A framework for creating stand-ins for CLI tools that pretend
+to be the real thing for when "the real thing" isn't suitable, such as in
+automated tests.
+"""
 
 """
 See PEP 440 for version scheme
