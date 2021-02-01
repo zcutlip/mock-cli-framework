@@ -1,1 +1,1 @@
-DISTRIBUTION_NAME="mock-op"
+DISTRIBUTION_NAME="mock-cli-framework"

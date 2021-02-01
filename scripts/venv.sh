@@ -14,4 +14,4 @@ then
     . ~/.dotfiles/virtualenvwrapperrc
 fi
 
-mkvirtualenv -r ./venv-reqs.txt "mock_op" || quit "Unable to make virtual environment." 1
+mkvirtualenv -r ./venv-reqs.txt "mock_cli" || quit "Unable to make virtual environment." 1
