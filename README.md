@@ -1,4 +1,4 @@
-# Mock CLI Tool Framework
+# Mock CLI Framework
 
 ## Description
 
