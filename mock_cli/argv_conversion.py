@@ -13,7 +13,7 @@ def argv_to_string(argv: List, args_to_pop=0, sep=DEFAULT_SEP):
     arg_str = ""
     for arg in argv:
         arg_str += f"{arg}{sep}"
-    arg_str.rstrip(sep)
+    arg_str = arg_str.rstrip(sep)
     return arg_str
 
 
