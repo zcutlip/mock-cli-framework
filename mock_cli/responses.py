@@ -121,7 +121,7 @@ class CommandInvocation(dict):
         response_dict["stdout_encoding"] = stdout_encoding
         response_dict["stderr_encoding"] = stderr_encoding
         response_dict["exit_status"] = returncode
-        if stderr_encoding == "binary":
+        if stdout_encoding == "binary":
             stdout_name = "output.bin"
         else:
             stdout_name = "output.txt"
