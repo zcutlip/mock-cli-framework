@@ -1,22 +1,30 @@
 import sys
-from argparse import ArgumentParser
+import os
 from .responses import ResponseDirectory
 
 
 class MockCommand:
-    def __init__(self, argument_parser: ArgumentParser, response_directory_path):
-        self.parser = argument_parser
+    def __init__(self, response_directory_path):
         self.response_directory = ResponseDirectory(response_directory_path)
 
+    def _write_binary(self, output_handle, data):
+        with os.fdopen(output_handle.fileno(), "wb", closefd=False) as fd:
+            fd.write(data)
+            fd.flush()
+
     def respond(self, args) -> int:
-        self.parser.parse_args(args)
         response = self.response_directory.response_lookup(args)
-        stdout_buf = response.output
-        stderr_buf = response.error_output
+
         exit_status = response.return_code
-        if stdout_buf:
-            sys.stdout.write(stdout_buf)
-        if stderr_buf:
-            sys.stderr.write(stderr_buf)
+        if response.output:
+            if response.stdout_encoding == "binary":
+                self._write_binary(sys.stdout, response.output)
+            else:
+                sys.stdout.write(response.output)
+        if response.error_output:
+            if response.stderr_encoding == "binary":
+                self._write_binary(sys.stderr, response.error_output)
+            else:
+                sys.stderr.write(response.error_output)
 
         return exit_status
