@@ -4,7 +4,7 @@
 
 This is a framework that can be called from a short Python console script to simulate the responses of an actual command-line tool.
 
-`mock-cli-tool` provides API for two purposes:
+`mock-cli-framework` provides API for two purposes:
 
 - Playing back canned responses based on a provided list of command-line arguments in order to simulate an actual command-line tool's behavior
 - Generating a directory of canned responses from invocations of the actual tool
@@ -13,7 +13,7 @@ A command "invocation" is a unique list of arguments to that command. A "respons
 
 ## Why?
 
-This is useful in cases where the real command-line tool can't be used. For example you might have a script or other program that shells out to a command. You want to test that your code processes that command's output and handles its errors properly, such as in automated tests. But the tests can't provide things the real command requires like human interaction or online account access that would be needed by the real tool. You can use `mock-cli-tool` to "record" the responses of the real command-line tool, and then to "play back" those reponses in your testing environment.
+This is useful in cases where the real command-line tool can't be used. For example you might have a script or other program that shells out to a command. You want to test that your code processes that command's output and handles its errors properly, such as in automated tests. But the tests can't provide things the real command requires like human interaction or online account access that would be needed by the real tool. You can use `mock-cli-work` to "record" the responses of the real command-line tool, and then to "play back" those reponses in your testing environment.
 
 ## Using
 
