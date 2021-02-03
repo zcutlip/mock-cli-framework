@@ -1,5 +1,5 @@
 import json
-from typing import Dict
+from typing import Dict, List
 from pathlib import Path
 from .path import ActualPath
 from .argv_conversion import argv_to_string
@@ -86,8 +86,8 @@ class CommandResponse(dict):
 
 
 class CommandInvocation(dict):
-    def __init__(self, cmd_args, output, error_output,
-                 returncode, invocation_name, response_dir=None):
+    def __init__(self, cmd_args: List[str], output: bytes, error_output: bytes,
+                 returncode: int, invocation_name: str):
         _dict = {"args": cmd_args}
         response_dict = {}
         response_dict["exit_status"] = returncode
@@ -97,11 +97,10 @@ class CommandInvocation(dict):
         response_dict["stderr"] = stderr_name
         response_dict["name"] = invocation_name
         cmd_response = CommandResponse(
-            response_dict, response_dir, output=output,
+            response_dict, None, output=output,
             error_output=error_output)
         _dict["response"] = cmd_response
         super().__init__(_dict)
-        self._response_dir = response_dir
 
     @property
     def cmd_args(self):
