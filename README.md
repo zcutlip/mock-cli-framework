@@ -13,7 +13,7 @@ A command "invocation" is a unique list of arguments to that command. A "respons
 
 ## Why?
 
-This is useful in cases where the real command-line tool can't be used. For example you might have a script or other program that shells out to a command. You want to test that your code processes that command's output and handles its errors properly, such as in automated tests. But the tests can't provide things the real command requires like human interaction or online account access that would be needed by the real tool. You can use `mock-cli-work` to "record" the responses of the real command-line tool, and then to "play back" those reponses in your testing environment.
+This is useful in cases where the real command-line tool can't be used. For example you might have a script or other program that shells out to a command. You want to verify that your code processes that command's output and handles its errors properly, such as in automated tests. But the tests can't provide things the real command requires like human interaction or online account access that would be needed by the real tool. You can use `mock-cli-work` to "record" the responses of the real command-line tool as well as use `mock-cli-framework` to create a fake version of the command. You can then have your code shell out to the "fake" command (using symlinks, PATH variable, etc.) to play back those reponses in your testing environment.
 
 ## Usage
 
@@ -121,7 +121,7 @@ $ mock-md5sum.py --binary big-file.bin
 f4c014ae60f420d90c2b52f4969f8d99 *big-file.bin
 ```
 
-If your code shells out to `md5sum` to hash really large files that you don't want to have in your testin harness, you can substitute `mock-md5sum.py` which will behave the same way (or similarly enough) as the real thing.
+If your code shells out to `md5sum` to hash really large files that you don't want to have in your testing harness, you can substitute `mock-md5sum.py` which will behave the same way as the real thing (or similarly enough). Presumably you can trust that `md5sum` hashes `big-file.bin` properly, so there's no need to replicate that part.
 
 ### Response Generation API
 
