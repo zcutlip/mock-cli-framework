@@ -31,16 +31,8 @@ class CommandResponse(dict):
         return self._response_dir
 
     @property
-    def stdout_encoding(self):
-        return self["stdout_encoding"]
-
-    @property
     def output(self):
         return self._read_output()
-
-    @property
-    def stderr_encoding(self):
-        return self["stderr_encoding"]
 
     @property
     def error_output(self):
@@ -56,27 +48,16 @@ class CommandResponse(dict):
                 "Missing stdout and/or stderr response")
 
         resp_path: Path
-        response_name = Path(self["name"])
-        resp_path = Path(response_dir, response_name)
+        stdout_name = self["stdout"]
+        stderr_name = self["stderr"]
+        resp_path = Path(response_dir, self["name"])
+        resp_path = ActualPath(resp_path, create=True)
 
-        resp_path.mkdir(parents=True, exist_ok=True)
-        # TODO: stderr binary output doesn't really make sense
-        # should we check for it and raise an exception?
-        if self.stdout_encoding == "binary":
-            binary = True
-            output_ext = "bin"
-        else:
-            binary = False
-            output_ext = "txt"
+        output_path = Path(resp_path, f"{stdout_name}")
+        error_output_path = Path(resp_path, f"{stderr_name}")
 
-        output_path = Path(resp_path, f"output.{output_ext}")
-        error_output_path = Path(resp_path, "error_output.txt")
-
-        error_output_path.write_text(self._error_output)
-        if binary:
-            output_path.write_bytes(self._output)
-        else:
-            output_path.write_text(self._output)
+        output_path.write_bytes(self._output)
+        error_output_path.write_bytes(self._error_output)
 
     def _out_path(self, out_name):
         response_name = self["name"]
@@ -95,37 +76,23 @@ class CommandResponse(dict):
 
     def _read_output(self):
         stdout_path = self._stdout_path()
-        if self.stdout_encoding == "binary":
-            mode = "rb"
-        else:
-            mode = "r"
-        output = open(stdout_path, mode).read()
+        output = open(stdout_path, "rb").read()
         return output
 
     def _read_error_output(self):
         stder_path = self._stderr_path()
-        if self.stderr_encoding == "binary":
-            mode = "rb"
-        else:
-            mode = "r"
-        output = open(stder_path, mode).read()
+        output = open(stder_path, "rb").read()
         return output
 
 
 class CommandInvocation(dict):
     def __init__(self, cmd_args, output, error_output,
-                 returncode, invocation_name, stdout_encoding="utf-8",
-                 stderr_encoding="utf-8", response_dir=None):
+                 returncode, invocation_name, response_dir=None):
         _dict = {"args": cmd_args}
         response_dict = {}
-        response_dict["stdout_encoding"] = stdout_encoding
-        response_dict["stderr_encoding"] = stderr_encoding
         response_dict["exit_status"] = returncode
-        if stdout_encoding == "binary":
-            stdout_name = "output.bin"
-        else:
-            stdout_name = "output.txt"
-        stderr_name = "error_output.txt"
+        stdout_name = "output"
+        stderr_name = "error_output"
         response_dict["stdout"] = stdout_name
         response_dict["stderr"] = stderr_name
         response_dict["name"] = invocation_name

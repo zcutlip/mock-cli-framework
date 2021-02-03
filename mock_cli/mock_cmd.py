@@ -17,14 +17,9 @@ class MockCommand:
 
         exit_status = response.return_code
         if response.output:
-            if response.stdout_encoding == "binary":
-                self._write_binary(sys.stdout, response.output)
-            else:
-                sys.stdout.write(response.output)
+            self._write_binary(sys.stdout, response.output)
+
         if response.error_output:
-            if response.stderr_encoding == "binary":
-                self._write_binary(sys.stderr, response.error_output)
-            else:
-                sys.stderr.write(response.error_output)
+            self._write_binary(sys.stderr, response.error_output)
 
         return exit_status
