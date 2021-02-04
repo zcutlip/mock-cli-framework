@@ -202,3 +202,4 @@ There are a number of limitations to be aware of that prevent `mock-cli-framewor
   - No assumptions can be made about one workload being faster/slower than another
 - Commands that run interactively can't be simulated
 - No side effects such as data written to disk can be simulated
+- If the output contains any time-sensitive details such as time-stamped logs, those details will reflect whatever was recorded and may not be current
