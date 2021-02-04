@@ -1,5 +1,5 @@
 __title__ = "Mock CLI Framework"
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0"
 __summary__ = """A framework for creating stand-ins for CLI tools that pretend
 to be the real thing for when "the real thing" isn't suitable, such as in
 automated tests.
