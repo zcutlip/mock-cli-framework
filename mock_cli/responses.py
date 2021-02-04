@@ -124,6 +124,14 @@ class ResponseDirectory:
     }
 
     def __init__(self, directory_path, create=False, response_dir=None):
+        if isinstance(directory_path, str):
+            directory_path = Path(directory_path)
+        dpath_base = directory_path.name
+        # Ensure containing directory exists\
+        # resolve symlinks, relative paths, userpaths (~/)
+        dpath_dir = ActualPath(directory_path.parent, create=True)
+        directory_path = ActualPath(dpath_dir, fname=dpath_base)
+
         self._response_directory_filename = directory_path
         self._response_directory: Dict = self._load_or_create_directory(directory_path, create, response_dir)
 
