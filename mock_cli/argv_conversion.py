@@ -1,5 +1,5 @@
+import shlex
 from typing import List, AnyStr
-
 
 DEFAULT_SEP = "|"
 
@@ -21,3 +21,10 @@ def argv_from_string(arg_str: AnyStr, popped_args=[], sep=DEFAULT_SEP):
     argv = list(popped_args)
     split_args = arg_str.split(sep)
     argv.extend(split_args)
+    return argv
+
+
+def arg_shlex_from_string(arg_str: AnyStr, sep=DEFAULT_SEP):
+    argv = argv_from_string(arg_str, sep=sep)
+    arg_str = shlex.join(argv)
+    return arg_str

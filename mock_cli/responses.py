@@ -2,7 +2,7 @@ import json
 from typing import Dict, List
 from pathlib import Path
 from .path import ActualPath
-from .argv_conversion import argv_to_string
+from .argv_conversion import argv_to_string, arg_shlex_from_string
 
 
 class ResponseRecordException(Exception):
@@ -168,7 +168,8 @@ class ResponseDirectory:
         try:
             response_dict = self.commands[arg_string]
         except KeyError:
-            raise ResponseLookupException("No response for command {}".format(arg_string))
+            escaped_arg_str = arg_shlex_from_string(arg_string)
+            raise ResponseLookupException("No response for command args: {}".format(escaped_arg_str))
 
         response = CommandResponse(response_dict, self.response_dir)
         return response
