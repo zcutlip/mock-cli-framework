@@ -17,6 +17,10 @@ class ResponseLookupException(Exception):
     pass
 
 
+class ResponseDirectoryException(Exception):
+    pass
+
+
 class CommandResponse(dict):
     def __init__(self, response_dict, response_dir, output=None, error_output=None):
         super().__init__(response_dict)
@@ -128,10 +132,10 @@ class ResponseDirectory:
         try:
             directory = json.load(open(directory_path, "r"))
             directory_missing = False
-        except FileNotFoundError:
+        except FileNotFoundError as nfe:
             directory_missing = True
             if not create:
-                raise
+                raise ResponseDirectoryException(f"Directory path not found {directory_path}") from nfe
             else:
                 directory = self.default_directory
                 if response_dir:
