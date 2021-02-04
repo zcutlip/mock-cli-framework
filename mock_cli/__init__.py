@@ -10,5 +10,9 @@ from .mock_cmd import MockCommand  # noqa: F401
 from .responses import (  # noqa: F401
     ResponseDirectory,
     CommandInvocation,
-    CommandResponse
+    CommandResponse,
+    ResponseAddException,
+    ResponseLookupException,
+    ResponseRecordException,
+    ResponseDirectoryException,
 )
