@@ -7,9 +7,9 @@ source "$DIRNAME"/projectname.sh
 # utility functions
 source "$DIRNAME"/functions.sh
 
-if ! branch_is_master;
+if ! branch_is_master_or_main;
 then
-    quit "Checkout branch 'master' before generating release." 1
+    quit "Checkout branch 'main' before generating release." 1
 fi
 
 if ! branch_is_clean;
