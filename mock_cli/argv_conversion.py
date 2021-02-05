@@ -24,7 +24,7 @@ def argv_from_string(arg_str: AnyStr, popped_args=[], sep=DEFAULT_SEP):
     return argv
 
 
-def arg_shlex_from_string(arg_str: AnyStr, sep=DEFAULT_SEP):
-    argv = argv_from_string(arg_str, sep=sep)
+def arg_shlex_from_string(arg_str: AnyStr, popped_args=[], sep=DEFAULT_SEP):
+    argv = argv_from_string(arg_str, popped_args=popped_args, sep=sep)
     arg_str = shlex.join(argv)
     return arg_str
