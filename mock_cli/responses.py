@@ -147,6 +147,8 @@ class ResponseDirectory:
             else:
                 directory = self.default_directory
                 if response_dir:
+                    if isinstance(response_dir, Path):
+                        response_dir = str(response_dir)
                     directory["meta"]["response_dir"] = response_dir
 
         if directory_missing and create:
