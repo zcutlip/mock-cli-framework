@@ -118,7 +118,7 @@ class CommandInvocation(dict):
 class ResponseDirectory:
     default_directory = {
         "meta": {
-            "response_dir": Path("responses")
+            "response_dir": "responses"
         },
         "commands": {}
     }
