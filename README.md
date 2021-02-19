@@ -103,8 +103,8 @@ def main():
     # Ideally we should fail in the same way the real command would fail
     parser = build_arg_parser()
     parser.parse_args()
-    response_directory_path = "./response-directory.json"
-    cmd = MockCommand(response_directory_path)
+    responsedir_json_file = "./response-directory.json"
+    cmd = MockCommand(responsedir_json_file)
     args = sys.argv[1:]
     exit_status = cmd.respond(args)
     return exit_status
@@ -132,7 +132,7 @@ To generate responses, there are two classes to know about;
 
 The `ResponseDirectory` class takes one required arguments and two optional ones:
 
-- `directory_path` is the path and filename of the response JSON dictionary that either exists or is to be created.
+- `responsedir_json_file` is the path and filename of the response JSON dictionary that either exists or is to be created.
 - `create` Is an optional boolean flag to create the JSON dictionary if it doesn't already exist, defaulting to `False`
 - `response_dir` Is an optional path to a directory on disk that will contain recorded response output files.
   - It is required if `create` is true, so that it can be stored in the response dictionary for later use

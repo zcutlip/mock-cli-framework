@@ -123,27 +123,27 @@ class ResponseDirectory:
         "commands": {}
     }
 
-    def __init__(self, directory_path, create=False, response_dir=None):
-        if isinstance(directory_path, str):
-            directory_path = Path(directory_path)
-        dpath_base = directory_path.name
+    def __init__(self, responsedir_json_file, create=False, response_dir=None):
+        if isinstance(responsedir_json_file, str):
+            responsedir_json_file = Path(responsedir_json_file)
+        dpath_base = responsedir_json_file.name
         # Ensure containing directory exists\
         # resolve symlinks, relative paths, userpaths (~/)
-        dpath_dir = ActualPath(directory_path.parent, create=True)
-        directory_path = ActualPath(dpath_dir, fname=dpath_base)
+        dpath_dir = ActualPath(responsedir_json_file.parent, create=True)
+        responsedir_json_file = ActualPath(dpath_dir, fname=dpath_base)
 
-        self._response_directory_filename = directory_path
-        self._response_directory: Dict = self._load_or_create_directory(directory_path, create, response_dir)
+        self._response_responsedir_json_filename = responsedir_json_file
+        self._response_directory: Dict = self._load_or_create_directory(responsedir_json_file, create, response_dir)
 
-    def _load_or_create_directory(self, directory_path, create, response_dir):
+    def _load_or_create_directory(self, responsedir_json_file, create, response_dir):
 
         try:
-            directory = json.load(open(directory_path, "r"))
+            directory = json.load(open(responsedir_json_file, "r"))
             directory_missing = False
         except FileNotFoundError as nfe:
             directory_missing = True
             if not create:
-                raise ResponseDirectoryException(f"Directory path not found {directory_path}") from nfe
+                raise ResponseDirectoryException(f"Directory path not found {responsedir_json_file}") from nfe
             else:
                 directory = self.default_directory
                 if response_dir:
@@ -152,7 +152,7 @@ class ResponseDirectory:
                     directory["meta"]["response_dir"] = response_dir
 
         if directory_missing and create:
-            self._save_to_disk(directory_path, directory)
+            self._save_to_disk(responsedir_json_file, directory)
         return directory
 
     @property
@@ -176,19 +176,19 @@ class ResponseDirectory:
         response = CommandResponse(response_dict, self.response_dir)
         return response
 
-    def _save_to_disk(self, directory_filename, directory):
-        with open(directory_filename, "w") as f:
+    def _save_to_disk(self, responsedir_json_filename, directory):
+        with open(responsedir_json_filename, "w") as f:
             json.dump(directory, f, indent=2)
 
-    def add_command_invocation(self, cmd: CommandInvocation, save=False):
+    def add_command_invocation(self, cmd: CommandInvocation, overwrite=False, save=False):
         cmd_args = cmd.cmd_args
         arg_string = argv_to_string(cmd_args)
 
         commands: Dict = self._response_directory["commands"]
-        if arg_string in commands:
+        if arg_string in commands and overwrite is False:
             raise ResponseAddException(f"Response already registered for command: '{cmd_args}'")
-        response = cmd.response
+        response: CommandResponse = cmd.response
         response.record_response(self.response_dir)
         commands[arg_string] = dict(response)
         if save:
-            self._save_to_disk(self._response_directory_filename, self._response_directory)
+            self._save_to_disk(self._response_responsedir_json_filename, self._response_directory)
