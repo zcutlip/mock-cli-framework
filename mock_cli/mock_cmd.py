@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 from .mock_cmd_state import MockCMDStateNoDirectoryException
-from .responses import ResponseDirectory
+from .responses import CommandResponse, ResponseDirectory
 
 
 class MockCommandResponseDirException(Exception):
@@ -32,6 +32,10 @@ class MockCommand:
         with os.fdopen(output_handle.fileno(), "wb", closefd=False) as fd:
             fd.write(data)
             fd.flush()
+
+    def get_response(self, args) -> CommandResponse:
+        response = self.response_directory.response_lookup(args)
+        return response
 
     def respond(self, args) -> int:
         response = self.response_directory.response_lookup(args)
