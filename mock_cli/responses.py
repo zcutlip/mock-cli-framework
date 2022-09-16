@@ -1,8 +1,9 @@
 import json
-from typing import Dict, List
 from pathlib import Path
+from typing import Dict, List
+
+from .argv_conversion import arg_shlex_from_string, argv_to_string
 from .path import ActualPath
-from .argv_conversion import argv_to_string, arg_shlex_from_string
 
 
 class ResponseRecordException(Exception):
@@ -139,17 +140,19 @@ class ResponseDirectory:
         responsedir_json_file = ActualPath(dpath_dir, fname=dpath_base)
 
         self._response_responsedir_json_filename = responsedir_json_file
-        self._response_directory: Dict = self._load_or_create_directory(responsedir_json_file, create, response_dir)
+        self._response_directory: Dict = self._load_or_create_directory(
+            responsedir_json_file, create, response_dir)
 
     def _load_or_create_directory(self, responsedir_json_file, create, response_dir):
 
         try:
             directory = json.load(open(responsedir_json_file, "r"))
             directory_missing = False
-        except FileNotFoundError as nfe:
+        except FileNotFoundError as e:
             directory_missing = True
             if not create:
-                raise ResponseDirectoryException(f"Directory path not found {responsedir_json_file}") from nfe
+                raise ResponseDirectoryException(
+                    f"Directory path not found {responsedir_json_file}") from e
             else:
                 directory = self.default_directory
                 if response_dir:
@@ -177,7 +180,8 @@ class ResponseDirectory:
             response_dict = self.commands[arg_string]
         except KeyError:
             escaped_arg_str = arg_shlex_from_string(arg_string)
-            raise ResponseLookupException("No response for command args: {}".format(escaped_arg_str))
+            raise ResponseLookupException(
+                "No response for command args: {}".format(escaped_arg_str))
 
         response = CommandResponse(response_dict, self.response_dir)
         return response
@@ -192,9 +196,11 @@ class ResponseDirectory:
 
         commands: Dict = self._response_directory["commands"]
         if arg_string in commands and overwrite is False:
-            raise ResponseAddException(f"Response already registered for command: '{cmd_args}'")
+            raise ResponseAddException(
+                f"Response already registered for command: '{cmd_args}'")
         response: CommandResponse = cmd.response
         response.record_response(self.response_dir)
         commands[arg_string] = dict(response)
         if save:
-            self._save_to_disk(self._response_responsedir_json_filename, self._response_directory)
+            self._save_to_disk(
+                self._response_responsedir_json_filename, self._response_directory)
