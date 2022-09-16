@@ -48,3 +48,7 @@ class MockCommand:
             self._write_binary(sys.stderr, response.error_output)
 
         return exit_status
+
+    def _iterate_state(self):
+        if self._mock_cmd_state:
+            self._mock_cmd_state.iterate_config()
