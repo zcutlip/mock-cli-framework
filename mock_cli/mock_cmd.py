@@ -11,8 +11,11 @@ class MockCommandResponseDirException(Exception):
 
 
 class MockCommand:
-    def __init__(self, responsedir_json_file):
-        self.response_directory = ResponseDirectory(responsedir_json_file)
+    def __init__(self, response_directory=None, state_dir=None):
+        self._mock_cmd_state = self._get_mock_cmd_state(state_dir)
+
+        self.response_directory = self._get_response_directory(
+            response_directory)
 
     def _get_response_directory(self, response_directory):
         if response_directory is None:
