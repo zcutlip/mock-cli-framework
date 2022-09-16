@@ -101,8 +101,13 @@ class CommandResponse(dict):
 
 
 class CommandInvocation(dict):
-    def __init__(self, cmd_args: List[str], output: bytes, error_output: bytes,
-                 returncode: int, invocation_name: str):
+    def __init__(self,
+                 cmd_args: List[str],
+                 output: bytes,
+                 error_output: bytes,
+                 returncode: int,
+                 invocation_name: str,
+                 changes_state: bool):
         _dict = {"args": cmd_args}
         response_dict = {}
         response_dict["exit_status"] = returncode
@@ -111,6 +116,7 @@ class CommandInvocation(dict):
         response_dict["stdout"] = stdout_name
         response_dict["stderr"] = stderr_name
         response_dict["name"] = invocation_name
+        response_dict["changes_state"] = changes_state
         cmd_response = CommandResponse(
             response_dict, None, output=output,
             error_output=error_output)
