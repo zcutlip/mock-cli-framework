@@ -53,6 +53,10 @@ class CommandResponse(dict):
     def return_code(self):
         return self["exit_status"]
 
+    @property
+    def changes_state(self) -> bool:
+        return self.get("changes_state", False)
+
     def record_response(self, response_dir):
         if None in [self._output, self._error_output]:
             raise ResponseRecordException(
