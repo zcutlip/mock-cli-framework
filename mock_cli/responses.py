@@ -36,11 +36,17 @@ class CommandResponse(dict):
 
     @property
     def output(self):
-        return self._read_output()
+        out = self._output
+        if out is None:
+            out = self._read_output()
+        return out
 
     @property
     def error_output(self):
-        return self._read_error_output()
+        err_out = self._error_output
+        if err_out is None:
+            err_out = self._read_error_output()
+        return err_out
 
     @property
     def return_code(self):
