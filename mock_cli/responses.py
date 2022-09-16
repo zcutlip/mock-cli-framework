@@ -158,7 +158,7 @@ class ResponseDirectory:
         try:
             directory = json.load(open(responsedir_json_file, "r"))
             directory_missing = False
-        except FileNotFoundError as e:
+        except (FileNotFoundError, json.JSONDecodeError) as e:
             directory_missing = True
             if not create:
                 raise ResponseDirectoryException(
