@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 
-from .mock_cmd_state import MockCMDStateNoDirectoryException
+from .mock_cmd_state import MockCMDState, MockCMDStateNoDirectoryException
 from .responses import CommandResponse, ResponseDirectory
 
 
@@ -52,3 +52,10 @@ class MockCommand:
     def _iterate_state(self):
         if self._mock_cmd_state:
             self._mock_cmd_state.iterate_config()
+
+    def _get_mock_cmd_state(self, state_dir):
+        try:
+            cmd_state = MockCMDState(state_dir=state_dir)
+        except MockCMDStateNoDirectoryException:
+            cmd_state = None
+        return cmd_state
