@@ -38,7 +38,7 @@ class MockCommand:
         return response
 
     def respond(self, args) -> int:
-        response = self.response_directory.response_lookup(args)
+        response = self.get_response(args)
 
         exit_status = response.return_code
         if response.output:
