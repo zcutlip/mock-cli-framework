@@ -40,6 +40,6 @@ ls -1 dist/"$SRC_DISTRIBUTION_NAME"-$version.* dist/"$BDIST_NAME"-$version*
 
 if prompt_yes_no;
 then
-    python3 -m twine upload dist/"$SRC_DISTRIBUTION_NAME"-$version.* dist/"$BDIST_NAME"-$version*
+    python3 -m twine upload -u "__token__" dist/"$SRC_DISTRIBUTION_NAME"-$version.* dist/"$BDIST_NAME"-$version*
 fi
 
