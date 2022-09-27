@@ -1,10 +1,9 @@
 #!/bin/sh -e
-
-source "$(dirname $0)"/functions.sh
+. "$(dirname "$0")/functions.sh"
 
 if ! branch_is_master_or_main;
 then
-    quit "Attempting to tag from branch $branch. Check out 'main' first." 1
+    quit "Attempting to tag from branch other than main. Check out 'main' first." 1
 fi
 
 
