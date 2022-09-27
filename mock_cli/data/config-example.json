@@ -1,0 +1,27 @@
+{
+
+    "iteration":0,
+    "max-iterations":2,
+    "response-directory-list":[
+        "tests/config/mock-op/responses_1.json",
+        "tests/config/mock-op/responses_2.json"
+    ],
+    "env-list":[
+        {
+            "set_vars":{
+                "HOME":"/var/tmp/home_1",
+                "MOCK_OP_SIGNIN_SUCCEED": "0"
+            },
+            "pop_vars": ["XDG_CONFIG_HOME"]
+        },
+        {
+            "set_vars": {
+                "HOME": "/var/tmp/home_2",
+                "MOCK_OP_SIGNIN_SUCCEED": "1"
+            },
+            "pop_vars": [
+                "XDG_CONFIG_HOME"
+            ]
+        }
+    ]
+}
