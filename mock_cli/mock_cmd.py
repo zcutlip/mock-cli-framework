@@ -27,7 +27,7 @@ class MockCommand:
             pass
 
         if response_directory is None:
-            raise MockCMDStateNoDirectoryException(
+            raise MockCommandResponseDirException(
                 "No response directory provided")
         return response_directory
 
