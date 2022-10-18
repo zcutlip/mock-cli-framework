@@ -19,7 +19,8 @@ class MockCommand:
 
     def _get_response_directory(self, response_directory):
         if response_directory is None:
-            response_directory = self._mock_cmd_state.response_directory_path()
+            if self._mock_cmd_state:
+                response_directory = self._mock_cmd_state.response_directory_path()
 
         elif isinstance(response_directory, (str, Path)):
             response_directory = ResponseDirectory(response_directory)
