@@ -210,10 +210,20 @@ class ResponseDirectory:
     def commands(self):
         return self._response_directory["commands"]
 
-    def response_lookup(self, args) -> CommandResponse:
+    @property
+    def commands_with_input(self):
+        return self._response_directory["commands_with_input"]
+
+    def response_lookup(self, args, input=None) -> CommandResponse:
+        input_hash = digest_input(input)
         arg_string = argv_to_string(args)
         try:
-            response_dict = self.commands[arg_string]
+            commands = self.commands
+            if input_hash:
+                commands = self.commands_with_input
+                commands = commands[input_hash]
+
+            response_dict = commands[arg_string]
         except KeyError:
             escaped_arg_str = arg_shlex_from_string(arg_string)
             raise ResponseLookupException(
