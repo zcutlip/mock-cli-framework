@@ -37,12 +37,12 @@ class MockCommand:
             fd.write(data)
             fd.flush()
 
-    def get_response(self, args) -> CommandResponse:
-        response = self.response_directory.response_lookup(args)
+    def get_response(self, args, input=None) -> CommandResponse:
+        response = self.response_directory.response_lookup(args, input=input)
         return response
 
-    def respond(self, args) -> int:
-        response = self.get_response(args)
+    def respond(self, args, input=None) -> int:
+        response = self.get_response(args, input=input)
 
         exit_status = response.return_code
         if response.output:
