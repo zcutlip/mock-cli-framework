@@ -158,12 +158,14 @@ class CommandInvocation(dict):
 class ResponseDirectory:
     default_directory = {
         "meta": {
-            "response_dir": "responses"
+            "response_dir": "responses",
+            "input_dir": "input"
         },
-        "commands": {}
+        "commands": {},
+        "commands_with_input": {}
     }
 
-    def __init__(self, responsedir_json_file, create=False, response_dir=None):
+    def __init__(self, responsedir_json_file, create=False, response_dir=None, input_dir=None):
         if isinstance(responsedir_json_file, str):
             responsedir_json_file = Path(responsedir_json_file)
         dpath_base = responsedir_json_file.name
@@ -171,13 +173,14 @@ class ResponseDirectory:
         # resolve symlinks, relative paths, userpaths (~/)
         dpath_dir = ActualPath(responsedir_json_file.parent, create=True)
         responsedir_json_file = ActualPath(dpath_dir, fname=dpath_base)
-
+        self._input_dir = None
+        if input_dir:
+            self._input_dir = Path(input_dir)
         self._response_responsedir_json_filename = responsedir_json_file
         self._response_directory: Dict = self._load_or_create_directory(
             responsedir_json_file, create, response_dir)
 
     def _load_or_create_directory(self, responsedir_json_file, create, response_dir):
-
         try:
             directory = json.load(open(responsedir_json_file, "r"))
             directory_missing = False
@@ -226,11 +229,19 @@ class ResponseDirectory:
     def add_command_invocation(self, cmd: CommandInvocation, overwrite=False, save=False):
         cmd_args = cmd.cmd_args
         arg_string = argv_to_string(cmd_args)
-
-        commands: Dict = self._response_directory["commands"]
+        if cmd.input_hash:
+            # get the "command with input" dict
+            commands: Dict = self._response_directory.setdefault(
+                "commands_with_input", {})
+            # then get the command dict for this specific input hash, or set an
+            # empty dict if it wasn't already there
+            commands = commands.setdefault(cmd.input_hash, {})
+        else:
+            commands: Dict = self._response_directory["commands"]
         if arg_string in commands and overwrite is False:
             raise ResponseAddException(
                 f"Response already registered for command: '{cmd_args}'")
+        cmd.record_input(self._input_dir)
         response: CommandResponse = cmd.response
         response.record_response(self.response_dir)
         commands[arg_string] = dict(response)
