@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from .argv_conversion import arg_shlex_from_string, argv_to_string
+from .hashing import digest_input
 from .path import ActualPath
 
 
@@ -107,12 +108,17 @@ class CommandInvocation(dict):
                  error_output: bytes,
                  returncode: int,
                  invocation_name: str,
-                 changes_state: bool):
+                 changes_state: bool,
+                 input: Optional[bytes] = None):
         _dict = {"args": cmd_args}
         response_dict = {}
         response_dict["exit_status"] = returncode
         stdout_name = "output"
         stderr_name = "error_output"
+
+        # returns None if input is None
+        # converts input to bytes if input is a string
+        input_hash = digest_input(input)
         response_dict["stdout"] = stdout_name
         response_dict["stderr"] = stderr_name
         response_dict["name"] = invocation_name
@@ -120,8 +126,10 @@ class CommandInvocation(dict):
         cmd_response = CommandResponse(
             response_dict, None, output=output,
             error_output=error_output)
+        _dict["input_hash"] = input_hash
         _dict["response"] = cmd_response
         super().__init__(_dict)
+        self._input = input
 
     @property
     def cmd_args(self):
@@ -130,6 +138,21 @@ class CommandInvocation(dict):
     @property
     def response(self):
         return self["response"]
+
+    @property
+    def input_hash(self) -> Optional[str]:
+        return self["input_hash"]
+
+    def record_input(self, input_path):
+        if input_path and self._input:
+            input_path = Path(input_path, self.input_hash)
+            input_path.mkdir(parents=True, exist_ok=True)
+            input_path = Path(input_path, "input.bin")
+            input = self._input
+            if isinstance(input, str):
+                input = input.encode()
+            with open(input_path, "wb") as f:
+                f.write(input)
 
 
 class ResponseDirectory:
