@@ -48,7 +48,6 @@ class MockCMDEnvironmentConfig(dict):
         # so we don't blow up again on the way down
         if hasattr(self, "_saved_env"):
             if self._saved_env:
-                print("restoring env")
                 os.environ.clear()
                 os.environ.update(self._saved_env)
         self._saved_env = None
