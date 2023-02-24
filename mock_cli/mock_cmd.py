@@ -22,7 +22,7 @@ class MockCommand:
             if self._mock_cmd_state:
                 response_directory = self._mock_cmd_state.response_directory_path()
 
-        elif isinstance(response_directory, (str, Path)):
+        if isinstance(response_directory, (str, Path)):
             response_directory = ResponseDirectory(response_directory)
         elif isinstance(response_directory, ResponseDirectory):
             pass
