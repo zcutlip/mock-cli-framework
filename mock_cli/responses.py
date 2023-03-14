@@ -19,6 +19,14 @@ class ResponseLookupException(Exception):
     pass
 
 
+class ResponseReadException(Exception):
+    """
+    Exception for when a response definition exists in the directory,
+    but can't be found on disk, or otherwise isn't accessible
+    """
+    pass
+
+
 class ResponseDirectoryException(Exception):
     pass
 
