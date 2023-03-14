@@ -3,7 +3,11 @@ import sys
 from pathlib import Path
 
 from .mock_cmd_state import MockCMDState, MockCMDStateNoDirectoryException
-from .responses import CommandResponse, ResponseDirectory
+from .responses import (
+    CommandResponse,
+    ResponseDirectory,
+    ResponseReadException
+)
 
 
 class MockCommandResponseDirException(Exception):
@@ -45,11 +49,19 @@ class MockCommand:
         response = self.get_response(args, input=input)
 
         exit_status = response.return_code
+
+        try:
+            output = response.output
+            error_output = response.error_output
+        except (FileNotFoundError, PermissionError, OSError) as err:
+            err_msg = f"Response couldn't be read {err}"
+            raise ResponseReadException(err_msg)
+
         if response.output:
-            self._write_binary(sys.stdout, response.output)
+            self._write_binary(sys.stdout, output)
 
         if response.error_output:
-            self._write_binary(sys.stderr, response.error_output)
+            self._write_binary(sys.stderr, error_output)
 
         if response.changes_state:
             self._iterate_state()
