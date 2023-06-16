@@ -1,19 +1,18 @@
 import shlex
-from typing import List, AnyStr
+from typing import AnyStr, List
 
 DEFAULT_SEP = "|"
 
 
 def argv_to_string(argv: List, args_to_pop=0, sep=DEFAULT_SEP):
-    popped_args = []
     for i in range(0, args_to_pop):
-        popped = argv.pop(0)
-        popped_args.append(popped)
+        argv.pop(0)
 
-    arg_str = ""
-    for arg in argv:
-        arg_str += f"{arg}{sep}"
-    arg_str = arg_str.rstrip(sep)
+    # avoid using format strings
+    # in some cases pyonepassword uses RedactableString objects
+    # and format strings will result in redacted versions of those strings
+    arg_str = sep.join(argv)
+
     return arg_str
 
 
