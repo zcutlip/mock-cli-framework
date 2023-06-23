@@ -91,8 +91,9 @@ class MockCMDStateConfig(dict):
 
     @property
     def response_directory(self):
-        response_dir_list = self["response-directory-list"]
-        response_dir = response_dir_list[self.iteration]
+        state_list = self.state_list
+        current_state = state_list[self.iteration]
+        response_dir = current_state["response-directory"]
         return response_dir
 
     @property
@@ -110,6 +111,10 @@ class MockCMDStateConfig(dict):
     @property
     def env_config(self) -> MockCMDEnvironmentConfig:
         pass
+
+    @property
+    def state_list(self):
+        return self["state-list"]
 
     def iterate(self):
         if self.iteration >= self.max_iterations:
