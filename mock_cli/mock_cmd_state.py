@@ -31,9 +31,17 @@ class MockCMDEnvironmentConfig(dict):
     def set_vars(self) -> Dict[str, str]:
         return self["set"]
 
+    @set_vars.setter
+    def set_vars(self, set_vars: Dict[str, str]):
+        self["set"] = set_vars
+
     @property
     def pop_vars(self) -> List[str]:
         return self["pop"]
+
+    @pop_vars.setter
+    def pop_vars(self, pop_vars: List[str]):
+        self["pop"] = pop_vars
 
     def initialize_env(self):
         for var in self.pop_vars:
