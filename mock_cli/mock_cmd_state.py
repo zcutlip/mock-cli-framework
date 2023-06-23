@@ -144,8 +144,9 @@ class MockCMDStateConfig(dict):
         # set to None before calling this in order to initialize
         # the next config otherwise we'll clobber the saved config
         if self._env_config is None:
-            env_list = self["env-list"]
-            env_config = env_list[self.iteration]
+            state_list = self.state_list
+            current_state = state_list[self.iteration]
+            env_config = current_state["env-vars"]
             env_config = MockCMDEnvironmentConfig(env_config)
             env_config.initialize_env()
             self._env_config = env_config
