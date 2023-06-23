@@ -2,6 +2,5 @@
 
     "iteration":-1,
     "max-iterations":-1,
-    "response-directory-list":[],
-    "env-list":[]
+    "state-list": []
 }
