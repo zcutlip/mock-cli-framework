@@ -29,11 +29,11 @@ class MockCMDEnvironmentConfig(dict):
 
     @property
     def set_vars(self) -> Dict[str, str]:
-        return self["set_vars"]
+        return self["set"]
 
     @property
     def pop_vars(self) -> List[str]:
-        return self["pop_vars"]
+        return self["pop"]
 
     def initialize_env(self):
         for var in self.pop_vars:
