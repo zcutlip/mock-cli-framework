@@ -116,6 +116,9 @@ class MockCMDStateConfig(dict):
     def state_list(self):
         return self["state-list"]
 
+    def increase_max_iterations(self):
+        self["max-iterations"] += 1
+
     def iterate(self):
         if self.iteration >= self.max_iterations:
             raise MockCMDStateMaxIterationException(
