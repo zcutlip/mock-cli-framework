@@ -136,6 +136,7 @@ class MockCMDStateConfig(dict):
         self._initialize_env()
 
     def save_config(self):
+        self._config_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self._config_path, "w") as f:
             json.dump(self, f, indent=2)
 
