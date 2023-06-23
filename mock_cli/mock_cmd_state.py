@@ -78,6 +78,8 @@ class MockCMDEnvironmentConfig(dict):
 class MockCMDStateConfig(dict):
 
     def __init__(self, config_path, config=None):
+        if isinstance(config_path, str):
+            config_path = Path(config_path)
         if config:
             config_dict = config
         else:
