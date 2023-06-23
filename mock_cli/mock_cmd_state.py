@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 from . import data
 from .pkg_resources import pkgfiles
@@ -118,6 +118,26 @@ class MockCMDStateConfig(dict):
 
     def increase_max_iterations(self):
         self["max-iterations"] += 1
+
+    def add_state(self, response_dir_path, set_vars: Optional[Dict] = None, pop_vars: Optional[List] = None):
+        # it's totally okay to have the same response directory more than once
+        # so we're not checking for collisions here
+        if set_vars is None:
+            set_vars = {}
+        if pop_vars is None:
+            pop_vars = []
+
+        env = MockCMDEnvironmentConfig.from_template()
+        env.set_vars = set_vars
+        env.pop_vars = pop_vars
+
+        state = {
+            "response-directory": response_dir_path,
+            "env-vars": env
+        }
+        self.state_list.append(state)
+        self.increase_max_iterations()
+        self.save_config()
 
     def iterate(self):
         if self.iteration >= self.max_iterations:
