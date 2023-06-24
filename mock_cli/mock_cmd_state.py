@@ -126,7 +126,8 @@ class MockCMDStateConfig(dict):
             set_vars = {}
         if pop_vars is None:
             pop_vars = []
-
+        # convert to string in case we got a Path
+        response_dir_path = str(response_dir_path)
         env = MockCMDEnvironmentConfig.from_template()
         env.set_vars = set_vars
         env.pop_vars = pop_vars
