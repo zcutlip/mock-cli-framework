@@ -153,6 +153,10 @@ The `CommandInvocation` class serves to bundle up a set of command-line argument
 - `invocation_name` is a unique, arbitrary name given to this particular invocation
   - It is recommended that the name be related to the command's arguments and intended action
   - The name should be filesystem-safe as it will be used as the directory name on disk to hold the output files
+- `changes_state` a boolean flag indicating if this command should trigger a state iteration
+- `input` is an optional bytes-like object that will be hashed if provided.
+  - The command invocation will be added under "commands_with_input" using its hash as a key
+  - Since more than one command may work with the same input, the invocations will be further keyed by their command-line arguments
 
 Here's an example:
 
@@ -192,7 +196,6 @@ def main():
 
 There are a number of limitations to be aware of that prevent `mock-cli-framework` from fully simulating some commands:
 
-- Standard input isn't processed, so behavior that is affected by it isn't simulated
 - Environment variables aren't processed, so behavior that is affected by them isn't simulated
 - Normal and error output can't be interleaved on the console
   - Standard output, if any, is written first
