@@ -219,12 +219,16 @@ class MockCMDState:
                 "No state directory path provided")
 
         state_dir = Path(state_dir)
-        if not state_dir.is_dir():
+
+        if not state_dir.exists():
             raise MockCMDStateDirException(
                 f"Invalid state directory: {state_dir}")
-        self._state_dir = state_dir
-        self._config = MockCMDStateConfig(
-            Path(self._state_dir, self.CONFIG_FILE_NAME))
+        if state_dir.is_dir():
+            state_path = Path(state_dir, self.CONFIG_FILE_NAME)
+        else:
+            state_path = state_dir
+        self._state_path = state_path
+        self._config = MockCMDStateConfig(Path(self._state_path))
 
     def response_directory_path(self) -> str:
         return self._config.response_directory
