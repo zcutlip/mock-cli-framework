@@ -1,7 +1,4 @@
-from setuptools import (
-    setup,
-    find_packages
-)
+from setuptools import find_packages, setup
 
 about = {}
 with open("mock_cli/__about__.py") as fp:
@@ -23,5 +20,5 @@ setup(name='mock-cli-framework',
       entry_points={},
       python_requires='>=3.7',
       install_requires=[],
-      package_data={},
+      package_data={'mock_cli': ['data/**/*json']},
       )
