@@ -119,7 +119,12 @@ class MockCMDStateConfig(dict):
     def increase_max_iterations(self):
         self["max-iterations"] += 1
 
-    def add_state(self, response_dir_path, set_vars: Optional[Dict] = None, pop_vars: Optional[List] = None):
+    def add_state(self,
+                  response_dir_path: Union[str, Path],
+                  state_iteration: int,
+                  set_vars: Optional[Dict] = None,
+                  pop_vars: Optional[List] = None,
+                  overwrite_iteration: bool = False):
         # it's totally okay to have the same response directory more than once
         # so we're not checking for collisions here
         if set_vars is None:
@@ -136,9 +141,24 @@ class MockCMDStateConfig(dict):
             "response-directory": response_dir_path,
             "env-vars": env
         }
-        self.state_list.append(state)
-        self.increase_max_iterations()
-        self.save_config()
+
+        if state_iteration >= 0 and state_iteration < len(self.state_list):
+            if overwrite_iteration:
+                print("replacing state iteration")
+                self.state_list[state_iteration] = state
+                print("Saving config")
+                self.save_config()
+        elif state_iteration != len(self.state_list):
+            # state iteration is zero-indexed
+            # so 0 is valid when there are no entries, 1 when only one entry, etc.
+            curr_state_count = len(self.state_list)
+            raise ValueError(
+                f"invalid state iteration: {state_iteration}, must be current state length: {curr_state_count}")
+
+        else:
+            self.state_list.append(state)
+            self.increase_max_iterations()
+            self.save_config()
 
     def iterate(self):
         if self.iteration >= self.max_iterations:
