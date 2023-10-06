@@ -1,11 +1,28 @@
 import os
-from abc import abstractclassmethod
-from pathlib import Path, _posix_flavour, _windows_flavour
+import sys
+from pathlib import Path
 from typing import Optional, Union
+
+try:
+    from pathlib import _posix_flavour, _windows_flavour
+except ImportError:
+    pass
+from abc import abstractclassmethod
+
+# significant changes to pathlib in python >= 3.12
+NEW_PATHLIB_MIN_PYTHON_VER = (3, 12)
 
 
 class AbstractPath(Path):
-    _flavour = _windows_flavour if os.name == 'nt' else _posix_flavour
+    _new_style = True
+    if sys.version_info < NEW_PATHLIB_MIN_PYTHON_VER:
+        _new_style = False
+
+    # previous to Python 3.12 you couldn't easily subclass pathlib.Path
+    # to do so required this hack to set _flavour
+    # but this explicitly does not work in 3.12
+    if not _new_style:
+        _flavour = _windows_flavour if os.name == 'nt' else _posix_flavour
 
     @abstractclassmethod
     def __new__(cls, *args):
@@ -53,3 +70,11 @@ class ActualPath(AbstractPath):
         obj = super().__new__(cls, outpath)
 
         return obj
+
+    def __init__(self, dirname, fname=None, **kwargs):
+        if self._new_style:
+            # only call superclass __init__ on python >= 3.12
+            args = [dirname]
+            if fname is not None:
+                args.append(fname)
+            super().__init__(*args)
