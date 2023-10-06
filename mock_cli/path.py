@@ -8,8 +8,9 @@ class AbstractPath(Path):
     _flavour = _windows_flavour if os.name == 'nt' else _posix_flavour
 
     @abstractclassmethod
-    def __new__(cls, *args, **kwargs):
-        return super().__new__(*args, **kwargs)
+    def __new__(cls, *args):
+        obj = super().__new__(*args)
+        return obj
 
     @classmethod
     def _setup_file_path(cls, dirname, fname=None, create=False) -> Path:
@@ -49,4 +50,6 @@ class ActualPath(AbstractPath):
         dirname = os.path.abspath(dirname)
         dirname = os.path.realpath(dirname)
         outpath = cls._setup_file_path(dirname, fname=fname, create=create)
-        return super().__new__(cls, outpath)
+        obj = super().__new__(cls, outpath)
+
+        return obj
