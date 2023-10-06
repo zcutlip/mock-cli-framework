@@ -30,7 +30,10 @@ class AbstractPath(Path):
         return obj
 
     @classmethod
-    def _setup_file_path(cls, dirname, fname=None, create=False) -> Path:
+    def _setup_file_path(cls,
+                         dirname: Union[str, Path],
+                         fname: Optional[Union[str, Path]] = None,
+                         create: Optional[bool] = False) -> Path:
         if fname:
             outpath = Path(dirname, fname)
         else:
