@@ -6,7 +6,7 @@
 
 # if python3 ./setup.py --name produces the wrong PyPI distribution name
 # you maybe override it, setting the proper name here
-# DISTRIBUTION_NAME="mock_cli_framework"
+DISTRIBUTION_NAME="mock_cli_framework"
 
 # for python projects, if the root package is named differently
 # than the project/distribution name, override that here
