@@ -1,7 +1,9 @@
 autopep8
+build
 flake8
 ipython
 pycodestyle
-pytest
--r requirements.txt
+setuptools
+twine
 -e .
+-r requirements.txt
