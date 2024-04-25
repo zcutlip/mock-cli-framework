@@ -1,7 +1,7 @@
-flake8
 autopep8
-pycodestyle
+flake8
 ipython
+pycodestyle
 pytest
 -r requirements.txt
 -e .
