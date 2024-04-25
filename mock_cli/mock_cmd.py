@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+from typing import IO
 
 from .mock_cmd_state import MockCMDState, MockCMDStateNoDirectoryException
 from .responses import (
@@ -36,7 +37,12 @@ class MockCommand:
                 "No response directory provided")
         return response_directory
 
-    def _write_binary(self, output_handle, data):
+    @classmethod
+    def write_binary_output(cls, output_handle: IO, data: bytes):
+        return cls._write_binary(output_handle, data)
+
+    @classmethod
+    def _write_binary(cls, output_handle, data):
         with os.fdopen(output_handle.fileno(), "wb", closefd=False) as fd:
             fd.write(data)
             fd.flush()
